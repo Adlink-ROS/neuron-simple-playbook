@@ -1,0 +1,89 @@
+#################################
+#  Before install ros2 packages #
+#################################
+
+- name: install essential packages ROS2 installation
+  apt:
+    pkg: "{{installation_packages}}"
+    state: latest
+  become: yes
+
+- name: add ros2 gpg key
+  apt_key:
+    url: "{{ros2_key_server}}"
+    state: present
+  become: yes
+
+- name: add ros2 repository
+  apt_repository:
+    repo: "deb [arch=amd64,arm64] {{ ros2_package_server }} {{ ansible_lsb.codename }} main"
+    state: present
+    filename: ros2-latest
+    update-cache: yes
+  become: yes
+
+######################
+# install ros2 base  #
+######################
+
+- name: install ros2 base
+  apt:
+    pkg: "ros-{{ ros2_distro }}-ros-base"
+    state: latest
+  become: yes
+
+##########################
+# Install rmw opensplice #
+##########################
+
+- name: install ros2 rmw_opensplice
+  apt:
+    pkg: "ros-{{ ros2_distro }}-rmw-opensplice-cpp"
+    state: latest
+  become: yes
+  tags:
+    opensplice
+
+- name: Install ros2 development debian packages
+  apt:
+    pkg: "{{ item }}"
+  with_items:
+    - python3-argcomplete
+    - build-essential
+    - cmake
+    - git
+    - python3-colcon-common-extensions
+    - python3-lark-parser
+    - python3-pip
+    - python-rosdep
+    - python3-vcstool
+    - wget
+  become: yes
+  tags:
+    ros2-dev
+
+- name: Install ros2 development python packages
+  pip:
+    name: "{{ item.name }}"
+    version: "{{ item.version | default(omit) }}"
+    extra_args: --user
+    state: present
+  with_items:
+    - name: argcomplete
+    - name: flake8
+    - name: flake8-blind-except
+    - name: flake8-builtins
+    - name: flake8-class-newline
+    - name: flake8-comprehensions
+    - name: flake8-deprecated
+    - name: flake8-docstrings
+    - name: flake8-import-order
+    - name: flake8-quotes
+    - name: pytest-repeat
+    - name: pytest-rerunfailures
+    - name: pytest
+    - name: pytest-cov
+    - name: pytest-runner
+    - name: setuptools
+  tags:
+    ros2-dev

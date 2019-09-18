@@ -1,0 +1,11 @@
+---
+- name: ROS1 ROS2 Installation
+  hosts:
+    - all
+  roles:
+    - role: ros
+      vars:
+        ros_distro: "melodic"
+    - role: ros2
+      vars:
+        ros2_distro: "dashing"

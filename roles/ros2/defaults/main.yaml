@@ -1,0 +1,18 @@
+#############################
+#   For ROS2  repository    #
+#############################
+ros2_distro         : 'dashing'
+ros2_key_server     : 'http://repo.ros2.org/repos.key'
+ros2_package_server : 'http://packages.ros.org/ros2/ubuntu'
+
+#############################
+#   For ROS2  packages      #
+#############################
+
+installation_packages:
+  - curl
+  - gnupg2
+  - lsb-release
+
+colcon_packages:
+  - python3-colcon-common-extensions

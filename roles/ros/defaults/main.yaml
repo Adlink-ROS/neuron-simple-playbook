@@ -1,0 +1,8 @@
+#############################
+#   For ROS  repository     #
+#############################
+ros_distro         : 'melodic'
+ros_key_server     : 'ha.pool.sks-keyservers.net'
+ros_key_id         : 'C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654'
+ros_package_server : 'http://packages.ros.org/ros/ubuntu'
+ros_source_list_path: '/etc/ros/rosdep/sources.list.d/20-default.list'

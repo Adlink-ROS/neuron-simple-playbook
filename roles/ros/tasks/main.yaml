@@ -1,0 +1,60 @@
+#################################
+#  Before install ros packages  #
+#################################
+
+- name: add ros key
+  apt_key:
+    keyserver: "{{ ros_key_server }}"
+    id: "{{ ros_key_id }}"
+    state: present
+  become: yes
+
+- name: add ros repository
+  apt_repository:
+    repo: "deb {{ ros_package_server }} {{ ansible_lsb.codename }} main"
+    state: present
+    filename: ros
+    update-cache: yes
+  become: yes
+
+######################
+# install ros base   #
+######################
+
+- name: install ros base
+  apt:
+    pkg: "ros-{{ ros_distro }}-ros-base"
+    state: latest
+  become: yes
+
+####################
+# update ros base  #
+####################
+
+- name: update ros python packages
+  apt:
+    pkg:
+    - python-rosdep
+    - python-bloom
+    - python-wstool
+    - python-vcstool
+    - python-rospkg
+    - python-catkin-pkg
+    - python-catkin-tools
+    only_upgrade: yes
+    state: latest
+  become: yes
+
+####################
+# update rosdep    #
+####################
+
+- name: rosdep init
+  shell: "rosdep init"
+  args:
+    creates: "{{ ros_source_list_path }}"
+  become: yes
+
+- name: rosdep update
+  shell: "rosdep update"
+  changed_when: False
